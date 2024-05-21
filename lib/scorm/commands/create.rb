@@ -1,8 +1,11 @@
 module Scorm::Command
   class Create < Base
     def index
-      name = args.shift.strip rescue ''
-      raise(CommandFailed, "Invalid package name.") if name == ''
+      name = begin
+        args.shift.strip
+      rescue StandardError
+        raise(CommandFailed, "Invalid package name.")
+      end
 
       FileUtils.mkdir_p(name)
       Dir.glob(File.join(File.dirname(File.expand_path(__FILE__)), '../../../skeleton/*')).each do |file|

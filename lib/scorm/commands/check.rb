@@ -1,8 +1,11 @@
 module Scorm::Command
   class Check < Base
     def index
-      package = args.shift.strip rescue ''
-      raise(CommandFailed, "Invalid package.") if package == ''
+      package = begin
+        args.shift.strip
+      rescue StandardError
+        raise(CommandFailed, "Invalid package.")
+      end
 
       Scorm::Package.open(package, :dry_run => true) do |pkg|
         display "Checking package \"#{File.basename(package)}\""
