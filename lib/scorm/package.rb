@@ -2,6 +2,7 @@ require 'rubygems'
 require 'fileutils'
 require 'open-uri'
 require 'zip'
+require 'cgi'
 require 'scorm/datatypes'
 require 'scorm/manifest'
 
@@ -163,6 +164,7 @@ module Scorm
 
     # Returns +true+ if the specified file (or directory) exists in the package.
     def exists?(filename)
+      if File.exist?(@path) || File.exist?(CGI.unescape(@path))
         File.exist?(path_to(filename))
       else
         Zip::File::foreach(@package) do |entry|
