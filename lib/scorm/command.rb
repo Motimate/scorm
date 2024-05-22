@@ -1,3 +1,4 @@
+require 'zip'
 require 'scorm/commands/base'
 
 Dir["#{File.dirname(__FILE__)}/commands/*.rb"].each { |c| require c }
@@ -8,7 +9,7 @@ module Scorm
     class CommandFailed  < RuntimeError; end
 
     class << self
-      
+
       def error(msg)
         STDERR.puts(msg)
         exit 1
@@ -17,7 +18,7 @@ module Scorm
       def run(command, args)
         begin
           run_internal(command, args.dup)
-        rescue Zip::ZipError => e
+        rescue Zip::Error => e
           error e.message
         rescue InvalidPackage => e
           error e.message
